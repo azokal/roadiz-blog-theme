@@ -475,7 +475,7 @@ class AdminNewsController extends NodesController
                           ->findBy(
                             array(
                                 'status' => Node::DELETED,
-                                'nodetype' => $this->getService("nodeTypeApi")->getOneBy(
+                                'nodeType' => $this->getService("nodeTypeApi")->getOneBy(
                                     array("name" => "News")
                                     )
                             )
@@ -489,7 +489,7 @@ class AdminNewsController extends NodesController
             $this->publishConfirmMessage($request, $msg);
 
             $response = new RedirectResponse(
-                $this->getService('urlGenerator')->generate('newsAdminDeletedPage')
+                $this->getService('urlGenerator')->generate('newsAdminListPage')
             );
             $response->prepare($request);
 
@@ -632,62 +632,77 @@ class AdminNewsController extends NodesController
         }
     }
 
-/**
- * Return an deletion form for requested node.
- *
- * @param Symfony\Component\HttpFoundation\Request $request
- * @param int                                      $nodeId
- *
- * @return Symfony\Component\HttpFoundation\Response
- */
-public function unpublishAction(Request $request, $nodeId)
-{
-    $this->validateAccessForRole('ROLE_ACCESS_NEWS_STATUS');
+    /**
+     * Return an deletion form for requested node.
+     *
+     * @param Symfony\Component\HttpFoundation\Request $request
+     * @param int                                      $nodeId
+     *
+     * @return Symfony\Component\HttpFoundation\Response
+     */
+    public function unpublishAction(Request $request, $nodeId)
+    {
+        $this->validateAccessForRole('ROLE_ACCESS_NEWS_STATUS');
 
-    $node = $this->getService('em')
-        ->find('RZ\Roadiz\Core\Entities\Node', (int) $nodeId);
+        $node = $this->getService('em')
+            ->find('RZ\Roadiz\Core\Entities\Node', (int) $nodeId);
 
-    if (null !== $node &&
-        $node->isPublished()) {
+        if (null !== $node &&
+            $node->isPublished()) {
 
-        $this->assignation['node'] = $node;
+            $this->assignation['node'] = $node;
 
-        $node->setPublished(false);
-        $this->getService('em')->flush();
+            $node->setPublished(false);
+            $this->getService('em')->flush();
 
-        // Update Solr Search engine if setup
-        if (true === $this->getKernel()->pingSolrServer()) {
+            // Update Solr Search engine if setup
+            if (true === $this->getKernel()->pingSolrServer()) {
 
-            foreach ($node->getNodeSources() as $nodeSource) {
-                $solrSource = new \RZ\Roadiz\Core\SearchEngine\SolariumNodeSource(
-                    $nodeSource,
-                    $this->getService('solr')
-                );
-                $solrSource->getDocumentFromIndex();
-                $solrSource->updateAndCommit();
+                foreach ($node->getNodeSources() as $nodeSource) {
+                    $solrSource = new \RZ\Roadiz\Core\SearchEngine\SolariumNodeSource(
+                        $nodeSource,
+                        $this->getService('solr')
+                    );
+                    $solrSource->getDocumentFromIndex();
+                    $solrSource->updateAndCommit();
+                }
             }
+
+            $msg = $this->getTranslator()->trans(
+                'news.%name%.unpublished',
+                array('%name%'=>$node->getNodeName())
+            );
+            $this->publishConfirmMessage($request, $msg);
+            /*
+             * Force redirect to avoid resending form when refreshing page
+             */
+            $response = new RedirectResponse(
+                $this->getService('urlGenerator')->generate('newsAdminListPage')
+            );
+            $response->prepare($request);
+
+            return $response->send();
+
+        } else {
+            return $this->throw404();
         }
-
-        $msg = $this->getTranslator()->trans(
-            'news.%name%.unpublished',
-            array('%name%'=>$node->getNodeName())
-        );
-        $this->publishConfirmMessage($request, $msg);
-        /*
-         * Force redirect to avoid resending form when refreshing page
-         */
-        $response = new RedirectResponse(
-            $this->getService('urlGenerator')->generate('newsAdminListPage')
-        );
-        $response->prepare($request);
-
-        return $response->send();
-
-    } else {
-        return $this->throw404();
     }
-}
 
+    public function listDeletedAction(Request $request) {
+        $this->validateAccessForRole('ROLE_ACCESS_NEWS_DELETE');
+
+        $type = $this->getService('nodeTypeApi')->getOneBy(array("name" => "News"));
+        $news = $this->getService("nodeApi")->getBy(array("status" => NODE::DELETED, "nodeType" => $type));
+
+        $this->assignation["news"] = $news;
+
+        return new Response(
+            $this->getTwig()->render('admin/listDeleted.html.twig', $this->assignation),
+            Response::HTTP_OK,
+            array('content-type' => 'text/html')
+        );
+
+    }
 
     /**
      * @param RZ\Roadiz\Core\Entities\Node $node

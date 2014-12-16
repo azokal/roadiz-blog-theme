@@ -133,10 +133,23 @@ class BlogApp extends DefaultThemeApp
              */
             $entries['news'] = array(
                 'name' => 'Manage News',
-                'path' => $c['urlGenerator']->generate('newsAdminListPage'),
-                'icon' => 'uk-icon-cube',
-                'roles' => 'ROLE_ACCESS_NEWS',
-                'subentries' => null
+                'path' => null,
+                'icon' => 'uk-icon-file-text-o',
+                'roles' => array('ROLE_ACCESS_NEWS', 'ROLE_ACCESS_NEWS_DELETE'),
+                'subentries' => array(
+                    'newsList' => array(
+                        'name' => 'List News',
+                        'path' => $c['urlGenerator']->generate('newsAdminListPage'),
+                        'icon' => 'uk-icon-file-text-o',
+                        'roles' => array('ROLE_ACCESS_NEWS')
+                    ),
+                    'trashedNews' => array(
+                        'name' => 'Trashed News',
+                        'path' => $c['urlGenerator']->generate('newsAdminTrashPage'),
+                        'icon' => 'uk-icon-trash-o',
+                        'roles' => array('ROLE_ACCESS_NEWS_DELETE')
+                    )
+                )
             );
 
             return $entries;

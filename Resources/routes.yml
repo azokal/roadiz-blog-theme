@@ -56,6 +56,9 @@ newsAdminEditTranslatedPage:
 newsAdminDeletedPage:
     path:     /rz-admin/news/deleted
     defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::emptyTrashAction }
+newsAdminTrashPage:
+    path:     /rz-admin/news/trash
+    defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::listDeletedAction }
 newsAdminDeletePage:
     path:     /rz-admin/news/delete/{nodeId}
     defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::deleteAction }
