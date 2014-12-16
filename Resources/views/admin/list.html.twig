@@ -1,0 +1,69 @@
+{% if not head.ajax %}{% set baseTemplate = 'base.html.twig' %}{% else %}{% set baseTemplate = 'ajaxBase.html.twig' %}{% endif %}{% extends baseTemplate %}
+
+{% block customStyles %}
+<style>
+    /* Custom styles here */
+</style>
+{% endblock %}
+
+{% block customScripts %}
+<script>
+    /* Custom Stripts here */
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="content-global">
+    <header class="content-header">
+        <h1 class="content-title">News Manager</h1>
+        {% include 'widgets/countFiltersBar.html.twig' %}
+    </header>
+
+<div class="content-header-action-menu">
+    <div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+        <a href="{{ path('newsAdminAddPage') }}" class="uk-button"><i class="uk-icon-rz-plus"></i> {% trans %}create.a.node{% endtrans %} </a>
+    </div>
+</div>
+
+    {% include 'widgets/filtersBar.html.twig' %}
+
+    <article class="content content-no-action-menu">
+        <div class="content-table-cont">
+            <table class="content-table uk-table">
+                <thead>
+                    <tr>
+                        <th>{% trans %}title{% endtrans %}</th>
+                        <th>{% trans %}date{% endtrans %}</th>
+                        <th>{% trans %}actions{% endtrans %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for new in news %}
+                    <tr>
+                        <td>{{ new.nodeName }}</td>
+                        <td>{{ new.updatedAt|localizeddate('short', 'short') }}</td>
+                        <td>
+                        {% spaceless %}
+                            <a class="uk-button uk-button-content uk-button-small" href="{{ path('newsAdminEditPage', { newsId: new.id }) }}" title="{% trans %}edit.news{% endtrans %}" data-uk-tooltip="{animation:true}"><i class="uk-icon-rz-pencil"></i></a>
+                            {% if not new.locked %}
+                                {% if not new.deleted %}
+                                    {% if not new.published %}
+                                        <a class="uk-button uk-button-content uk-button-small uk-button-table-save" href="{{ path('newsAdminPublishPage', { nodeId: new.id }) }}" title="{% trans %}published{% endtrans %}" data-uk-tooltip="{animation:true}"><i class="uk-icon-check-square-o"></i></a>
+                                    {% else %}
+                                        <a class="uk-button uk-button-content uk-button-small" href="{{ path('newsAdminUnpublishPage', { nodeId: new.id }) }}" title="{% trans %}pending{% endtrans %}" data-uk-tooltip="{animation:true}"><i class="uk-icon-square-o"></i></a>
+                                    {% endif %}
+                                        <a class="uk-button uk-button-content uk-button-small uk-button-danger uk-button-table-delete" href="{{ path('newsAdminDeletePage', { nodeId: new.id }) }}" title="{% trans %}delete{% endtrans %}" data-uk-tooltip="{animation:true}"><i class="uk-icon-rz-trash-o"></i></a>
+                                {% else %}
+                                    <a class="uk-button uk-button-content uk-button-small" href="{{ path('newsAdminUndeletePage', { nodeId: new.id }) }}" data-uk-tooltip="{animation:true}" title="{% trans %}undelete{% endtrans %}"><i class="uk-icon-rz-untrash"></i></a>
+                                {% endif %}
+                            {% endif %}
+                        {% endspaceless %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+</section>
+{% endblock %}

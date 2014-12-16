@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+
+<article class="uk-article">
+<div id="news-block">
+    <div id="{{ nodeSource.node.nodeName }}">
+        <h2 class="uk-article-title" id="title"><a href="{{ nodeSource.getHandler().getUrl() }}">{{ nodeSource.title }}</a></h2>
+        <p class="uk-article-meta" id="meta">
+        <a href="{% if request.locale != _default_locale %}
+                 {{ path("newByArchivePageLocale", { 'year': nodeSource.date|date("Y"), 'month': nodeSource.date|date("m"), '_locale': request.locale}) }}
+                 {% else %}
+                 {{ path("newByArchivePage", { 'year': nodeSource.date|date("Y"), 'month': nodeSource.date|date("m") }) }}
+                 {% endif %}">{{ nodeSource.date | localizeddate('full', 'none') }}</a>. Tags:
+                 {% for tag in nodeSource.handler.tags %}
+                    <a href="{% if request.locale != _default_locale %}
+                             {{ path("newByTagPageLocale", {'tagName': tag.tagName, '_locale': request.locale }) }}
+                             {% else %}
+                             {{ path("newByTagPage", {'tagName': tag.tagName }) }}
+                             {% endif %}">
+                {{ tag.TranslatedTags.first.name }}
+                    </a>
+        {% endfor %}.
+    </p>
+        <p class="uk-article-lead" id="content">{{ nodeSource.content() | markdown }}</p>
+    </div>
+</div>
+</article>
+
+{% endblock %}

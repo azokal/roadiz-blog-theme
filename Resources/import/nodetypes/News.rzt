@@ -1,0 +1,40 @@
+{
+    "name": "News",
+    "displayName": "News",
+    "description": "News Node-type.",
+    "visible": true,
+    "newsletterType": false,
+    "hidingNodes": false,
+    "fields": [
+        {
+            "name": "content",
+            "label": "Content",
+            "description": "News content.",
+            "visible": true,
+            "type": 4,
+            "indexed": false,
+            "virtual": false,
+            "default_values": null
+        },
+        {
+            "name": "excerpt",
+            "label": "Excerpt",
+            "description": "News excerpt.",
+            "visible": true,
+            "type": 0,
+            "indexed": false,
+            "virtual": false,
+            "default_values": null
+        },
+        {
+            "name": "date",
+            "label": "Date",
+            "description": "News date.",
+            "visible": true,
+            "type": 1,
+            "indexed": false,
+            "virtual": false,
+            "default_values": null
+        }
+    ]
+}

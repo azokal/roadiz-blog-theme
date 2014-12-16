@@ -1,0 +1,78 @@
+# This route is required!
+homePage:
+    path:     /
+    defaults: { _controller: Themes\Blog\BlogApp::homeAction }
+homePageLocale:
+    path:     /{_locale}
+    defaults: { _controller: Themes\Blog\BlogApp::homeAction, _locale: en }
+    requirements:
+        _locale: en|fr
+newsPage:
+    path:     /news/{name}
+    defaults: { _controller: Themes\Blog\Controllers\NewsController::indexAction }
+    requirements: { name : "^[a-zA-Z_-]+$" }
+newsPageLocale:
+    path:     /{_locale}/news/{name}
+    defaults: { _controller: Themes\Blog\Controllers\NewsController::indexAction, _locale: en}
+    requirements:
+        name : "^[a-zA-Z_-]+$"
+        _locale: en|fr
+newByTagPage:
+    path:     /news/tag/{tagName}
+    defaults: { _controller: Themes\Blog\Controllers\NewsController::tagListingAction }
+    requirements: { tagName : "^[a-zA-Z_-]+$" }
+newByTagPageLocale:
+    path:     /{_locale}/news/tag/{tagName}
+    defaults: { _controller: Themes\Blog\Controllers\NewsController::tagListingAction, _locale: en }
+    requirements:
+        tagName : "^[a-zA-Z_]+$"
+        _locale: en|fr
+newByArchivePage:
+    path:     /arch/{year}/{month}
+    defaults: { _controller: Themes\Blog\Controllers\NewsController::archiveListingAction }
+    requirements: { year : "^[0-9]+$", month : "^[0-9]+$" }
+newByArchivePageLocale:
+    path:     /{_locale}/arch/{year}/{month}
+    defaults: { _controller: Themes\Blog\Controllers\NewsController::archiveListingAction, _locale: en }
+    requirements:
+        year : "^[0-9]+$"
+        month : "^[0-9]+$"
+        _locale: en|fr
+newsAdminListPage:
+    path:     /rz-admin/news
+    defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::listAction }
+newsAdminAddPage:
+    path:     /rz-admin/news/add
+    defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::addAction }
+newsAdminEditPage:
+    path:     /rz-admin/news/edit/{newsId}
+    defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::editAction }
+    requirements:
+        newsId : "^[0-9]+$"
+newsAdminEditTranslatedPage:
+    path:     /rz-admin/news/edit/{newsId}/translation/{translationId}
+    defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::editAction }
+    requirements: { newsId : "[0-9]+", translationId : "[0-9]+" }
+newsAdminDeletedPage:
+    path:     /rz-admin/news/deleted
+    defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::emptyTrashAction }
+newsAdminDeletePage:
+    path:     /rz-admin/news/delete/{nodeId}
+    defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::deleteAction }
+    requirements:
+        nodeId : "^[0-9]+$"
+newsAdminUndeletePage:
+    path:     /rz-admin/news/undelete/{nodeId}
+    defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::undeleteAction }
+    requirements:
+        nodeId : "^[0-9]+$"
+newsAdminPublishPage:
+    path:     /rz-admin/news/publish/{nodeId}
+    defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::publishAction }
+    requirements:
+        nodeId : "^[0-9]+$"
+newsAdminUnpublishPage:
+    path:     /rz-admin/news/unpublish/{nodeId}
+    defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::unpublishAction }
+    requirements:
+        nodeId : "^[0-9]+$"

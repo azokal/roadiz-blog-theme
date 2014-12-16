@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+
+<div id="news-block" class="uk-grid">
+
+    <article class="uk-article uk-width-3-4">
+    {% for new in news %}
+        <div id="{{ new.name() }}">
+            <h2 class="uk-article-title" id="title"><a href="{{ new.getHandler().getUrl() }}">{{ new.title }}</a></h2>
+            <p class="uk-article-meta" id="meta">
+            <a href="{% if request.locale != _default_locale %}
+                     {{ path("newByArchivePageLocale", { 'year': new.date|date("Y"), 'month': new.date|date("m"), '_locale': request.locale}) }}
+                     {% else %}
+                     {{ path("newByArchivePage", { 'year': new.date|date("Y"), 'month': new.date|date("m") }) }}
+                     {% endif %}">{{ new.date | localizeddate('full', 'none') }}</a>. Tags:
+                {% for tag in new.handler.tags %}
+                    <a href="{% if request.locale != _default_locale %}
+                             {{ path("newByTagPageLocale", {'tagName': tag.tagName, '_locale': request.locale }) }}
+                             {% else %}
+                             {{ path("newByTagPage", {'tagName': tag.tagName }) }}
+                             {% endif %}">
+                        {{ tag.TranslatedTags.first.name }}
+                    </a>
+                {% endfor %}.
+            </p>
+            <p class="uk-article-lead" id="content">{% if not new.excerpt %}{{ new.content | truncate(140, true) }} {% else %} {{ new.excerpt }} {% endif %}</p>
+        </div>
+        <hr class="uk-article-divider">
+    {% endfor %}
+    </article>
+
+    <div id="news-menu" class="uk-width-1-4">
+        <h3>{% trans %}archive{% endtrans %}:</h3>
+    {% for key, archive in archives %}
+        <div id="{{archive|date("Y-F")}}">
+            <a href="{% if request.locale != _default_locale %}
+            {{ path("newByArchivePageLocale", { 'year': archive|date("Y"), 'month': archive|date("m"), '_locale': request.locale}) }}
+            {% else %}
+            {{ path("newByArchivePage", { 'year': archive|date("Y"), 'month': archive|date("m") }) }}
+            {% endif %}">{{archive|localizeddate('none', 'none', null, null, "Y MMMM")}}</a>
+        </div>
+    {% endfor %}
+        <hr class="uk-article-divider">
+        <h3>{% trans %}tag{% endtrans %}:</h3>
+    {% for tag in tags %}
+        <div id="{{ tag.tagName }}">
+            <a href="{% if request.locale != _default_locale %}
+            {{ path("newByTagPageLocale", {'tagName': tag.tagName, '_locale': request.locale }) }}
+            {% else %}
+            {{ path("newByTagPage", {'tagName': tag.tagName }) }}
+            {% endif %}">{{tag.translatedTags.first.name}}</a>
+        </div>
+
+    {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+
+<h1>{% trans %}news.with.filter{% endtrans %}: {% if type == 'date' %} {{ obj|localizeddate('none', 'none', null, null, "Y MMMM") }} {% else %} {{ obj.translatedTags.first.name }} {% endif %}.</h1>
+<article class="uk-article">
+<div id="news-block">
+{% for new in news %}
+    <div id="{{ new.name() }}">
+        <h2 class="uk-article-title" id="title"><a href="{{ new.getHandler().getUrl() }}">{{ new.title }}</a></h2>
+        <p class="uk-article-meta" id="meta">
+        <a href="{% if request.locale != _default_locale %}
+                 {{ path("newByArchivePageLocale", { 'year': new.date|date("Y"), 'month': new.date|date("m"), '_locale': request.locale}) }}
+                 {% else %}
+                 {{ path("newByArchivePage", { 'year': new.date|date("Y"), 'month': new.date|date("m") }) }}
+                 {% endif %}">{{ new.date | localizeddate('full', 'none') }}</a>. Tags:
+            {% for tag in new.handler.tags %}
+                <a href="{% if request.locale != _default_locale %}
+                         {{ path("newByTagPageLocale", {'tagName': tag.tagName, '_locale': request.locale }) }}
+                         {% else %}
+                         {{ path("newByTagPage", {'tagName': tag.tagName }) }}
+                         {% endif %}">
+                    {{ tag.TranslatedTags.first.name }}
+                </a>
+            {% endfor %}.
+        </p>
+        <p class="uk-article-lead" id="content">{% if not new.excerpt %}{{ new.content | truncate(140, true) }} {% else %} {{ new.excerpt }} {% endif %}</p>
+    </div>
+{% endfor %}
+</div>
+</article>
+
+{% endblock %}

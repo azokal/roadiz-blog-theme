@@ -1,0 +1,57 @@
+[
+    {
+        "tag_name": "newstypes",
+        "visible": true,
+        "locked": true,
+        "children": [
+            {
+                "tag_name": "life",
+                "visible": true,
+                "locked": false,
+                "children": [],
+                "tag_translation": [
+                    {
+                        "translation": "en",
+                        "title": "Life",
+                        "description": "Tag about my life."
+                    },
+                    {
+                        "translation": "fr",
+                        "title": "Moi",
+                        "description": "Etiquette à propo de ma vie."
+                    }
+                ]
+            },
+            {
+                "tag_name": "work",
+                "visible": true,
+                "locked": false,
+                "children": [],
+                "tag_translation": [
+                    {
+                        "translation": "en",
+                        "title": "Work",
+                        "description": "Tag about my work."
+                    },
+                    {
+                        "translation": "fr",
+                        "title": "Travail",
+                        "description": "Etiquette à propo de ma vie."
+                    }
+                ]
+            }
+        ],
+        "tag_translation": [
+            {
+                "translation": "en",
+                "title": "NewsTypes",
+                "description": "Parent type for news' label."
+            },
+            {
+                "translation": "fr",
+                "title": "NewsTypes",
+                "description": "Type parent des étiquettes de news"
+            }
+        ]
+    }
+]
