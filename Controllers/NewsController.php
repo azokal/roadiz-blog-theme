@@ -16,8 +16,8 @@ class NewsController extends BlogApp
 
     public function indexAction(
         Request $request,
-        $_locale = null,
-        $name
+        $name,
+        $_locale = null
     ) {
         $translation = $this->bindLocaleFromRoute($request, $_locale);
         $newsType = $this->getService('nodeTypeApi')->getOneBy(array("name" => "News"));
@@ -32,8 +32,6 @@ class NewsController extends BlogApp
         $this->prepareThemeAssignation($news, $translation);
 
         $this->getService('stopwatch')->start('twigRender');
-        //
-        // $this->assignaton['nodeSource'] = $news;
 
         return new Response(
             $this->getTwig()->render('news.html.twig', $this->assignation),
@@ -52,7 +50,7 @@ class NewsController extends BlogApp
      *
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function archiveListingAction(Request $request, $_locale = null, $year, $month)
+    public function archiveListingAction(Request $request, $year, $month, $_locale = null)
     {
         $translation = $this->bindLocaleFromRoute($request, $_locale);
         $this->prepareThemeAssignation(null, $translation);
@@ -81,7 +79,8 @@ class NewsController extends BlogApp
         return new Response(
             $this->getTwig()->render('newsTag.html.twig', $this->assignation),
             Response::HTTP_OK,
-            array('content-type' => 'text/html'));
+            array('content-type' => 'text/html')
+        );
     }
 
 
@@ -94,23 +93,23 @@ class NewsController extends BlogApp
      *
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function tagListingAction(Request $request, $_locale = null, $tagName)
+    public function tagListingAction(Request $request, $tagName, $_locale = null)
     {
         $translation = $this->bindLocaleFromRoute($request, $_locale);
         $this->prepareThemeAssignation(null, $translation);
 
         $tag = $this->getService('tagApi')->getOneBy(
-          array(
+            array(
             'translation' => $this->translation,
             'tagName' => $tagName
-          )
+            )
         );
 
         $news = $this->getService('nodeSourceApi')->getBy(
-          array(
+            array(
             "tags" => $tag,
             "translation" => $this->translation
-          )
+            )
         );
 
         $this->assignation['news'] = $news;
@@ -123,6 +122,7 @@ class NewsController extends BlogApp
         return new Response(
             $this->getTwig()->render('newsTag.html.twig', $this->assignation),
             Response::HTTP_OK,
-            array('content-type' => 'text/html'));
+            array('content-type' => 'text/html')
+        );
     }
 }

@@ -73,7 +73,6 @@ class AdminNewsController extends NodesController
         }
 
         if ($translation !== null) {
-
             $form = $this->getService('formFactory')
                 ->createBuilder()
                 ->add(
@@ -117,7 +116,6 @@ class AdminNewsController extends NodesController
             $form->handleRequest();
 
             if ($form->isValid()) {
-
                 try {
                     $news = $this->createNews($form->getData(), $translation);
 
@@ -136,7 +134,6 @@ class AdminNewsController extends NodesController
 
                     return $response->send();
                 } catch (EntityAlreadyExistsException $e) {
-
                     $this->publishErrorMessage($request, $e->getMessage());
 
                     $response = new RedirectResponse(
@@ -343,7 +340,6 @@ class AdminNewsController extends NodesController
         }
 
         try {
-
             $type = $this->getService('nodeTypeApi')->getOneBy(array("name" => "News"));
 
             $parent = $this->getService('nodeApi')->getOneBy(array("nodeName" => "news", "parent" => null));
@@ -408,7 +404,6 @@ class AdminNewsController extends NodesController
         if (null !== $node &&
             !$node->isDeleted() &&
             !$node->isLocked()) {
-
             $this->assignation['node'] = $node;
 
             $form = $this->buildDeleteForm($node);
@@ -416,13 +411,11 @@ class AdminNewsController extends NodesController
 
             if ($form->isValid() &&
                 $form->getData()['nodeId'] == $node->getId()) {
-
                 $node->getHandler()->softRemoveWithChildren();
                 $this->getService('em')->flush();
 
                 // Update Solr Search engine if setup
                 if (true === $this->getKernel()->pingSolrServer()) {
-
                     foreach ($node->getNodeSources() as $nodeSource) {
                         $solrSource = new \RZ\Roadiz\Core\SearchEngine\SolariumNodeSource(
                             $nodeSource,
@@ -473,12 +466,12 @@ class AdminNewsController extends NodesController
             $nodes = $this->getService('em')
                           ->getRepository('RZ\Roadiz\Core\Entities\Node')
                           ->findBy(
-                            array(
+                              array(
                                 'status' => Node::DELETED,
                                 'nodeType' => $this->getService("nodeTypeApi")->getOneBy(
                                     array("name" => "News")
-                                    )
-                            )
+                                )
+                              )
                           );
 
             foreach ($nodes as $node) {
@@ -522,7 +515,6 @@ class AdminNewsController extends NodesController
 
         if (null !== $node &&
             $node->isDeleted()) {
-
             $this->assignation['node'] = $node;
 
             $form = $this->buildDeleteForm($node);
@@ -530,13 +522,11 @@ class AdminNewsController extends NodesController
 
             if ($form->isValid() &&
                 $form->getData()['nodeId'] == $node->getId()) {
-
                 $node->getHandler()->softUnremoveWithChildren();
                 $this->getService('em')->flush();
 
                 // Update Solr Search engine if setup
                 if (true === $this->getKernel()->pingSolrServer()) {
-
                     foreach ($node->getNodeSources() as $nodeSource) {
                         $solrSource = new \RZ\Roadiz\Core\SearchEngine\SolariumNodeSource(
                             $nodeSource,
@@ -593,7 +583,6 @@ class AdminNewsController extends NodesController
 
         if (null !== $node &&
             !$node->isPublished()) {
-
             $this->assignation['node'] = $node;
 
             $node->setPublished(true);
@@ -601,7 +590,6 @@ class AdminNewsController extends NodesController
 
             // Update Solr Search engine if setup
             if (true === $this->getKernel()->pingSolrServer()) {
-
                 foreach ($node->getNodeSources() as $nodeSource) {
                     $solrSource = new \RZ\Roadiz\Core\SearchEngine\SolariumNodeSource(
                         $nodeSource,
@@ -649,7 +637,6 @@ class AdminNewsController extends NodesController
 
         if (null !== $node &&
             $node->isPublished()) {
-
             $this->assignation['node'] = $node;
 
             $node->setPublished(false);
@@ -657,7 +644,6 @@ class AdminNewsController extends NodesController
 
             // Update Solr Search engine if setup
             if (true === $this->getKernel()->pingSolrServer()) {
-
                 foreach ($node->getNodeSources() as $nodeSource) {
                     $solrSource = new \RZ\Roadiz\Core\SearchEngine\SolariumNodeSource(
                         $nodeSource,
@@ -688,7 +674,8 @@ class AdminNewsController extends NodesController
         }
     }
 
-    public function listDeletedAction(Request $request) {
+    public function listDeletedAction(Request $request)
+    {
         $this->validateAccessForRole('ROLE_ACCESS_NEWS_DELETE');
 
         $type = $this->getService('nodeTypeApi')->getOneBy(array("name" => "News"));
