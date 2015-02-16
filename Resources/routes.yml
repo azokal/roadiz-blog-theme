@@ -1,12 +1,12 @@
 # This route is required!
-homePage:
+newsHomePage:
     path:     /
     defaults: { _controller: Themes\Blog\BlogApp::homeAction }
-homePageLocale:
+newsHomePageLocale:
     path:     /{_locale}
     defaults: { _controller: Themes\Blog\BlogApp::homeAction, _locale: en }
     requirements:
-        _locale: en|fr
+        _locale: "[a-z]{2}"
 newsPage:
     path:     /news/{name}
     defaults: { _controller: Themes\Blog\Controllers\NewsController::indexAction }
@@ -16,7 +16,7 @@ newsPageLocale:
     defaults: { _controller: Themes\Blog\Controllers\NewsController::indexAction, _locale: en}
     requirements:
         name : "^[a-zA-Z_-]+$"
-        _locale: en|fr
+        _locale: "[a-z]{2}"
 newByTagPage:
     path:     /news/tag/{tagName}
     defaults: { _controller: Themes\Blog\Controllers\NewsController::tagListingAction }
@@ -26,7 +26,7 @@ newByTagPageLocale:
     defaults: { _controller: Themes\Blog\Controllers\NewsController::tagListingAction, _locale: en }
     requirements:
         tagName : "^[a-zA-Z_]+$"
-        _locale: en|fr
+        _locale: "[a-z]{2}"
 newByArchivePage:
     path:     /arch/{year}/{month}
     defaults: { _controller: Themes\Blog\Controllers\NewsController::archiveListingAction }
@@ -37,7 +37,7 @@ newByArchivePageLocale:
     requirements:
         year : "^[0-9]+$"
         month : "^[0-9]+$"
-        _locale: en|fr
+        _locale: "[a-z]{2}"
 newsAdminListPage:
     path:     /rz-admin/news
     defaults: { _controller: Themes\Blog\Controllers\AdminNewsController::listAction }

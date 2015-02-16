@@ -73,6 +73,7 @@ class BlogApp extends DefaultThemeApp
     public function homeAction(Request $request, $_locale = null)
     {
         $translation = $this->bindLocaleFromRoute($request, $_locale);
+
         parent::prepareThemeAssignation(null, $translation);
 
         $tagParent = $this->getService('tagApi')->getOneBy(array('tagName' => 'newstypes'));
@@ -86,7 +87,7 @@ class BlogApp extends DefaultThemeApp
         $news = $this->getService('nodeSourceApi')->getBy(
             array(
                 "node.nodeType" => $newsType,
-                'translation' => $translation
+                'translation' => $translation,
             ),
             array(
                 "date" => "DESC"

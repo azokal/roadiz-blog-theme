@@ -20,6 +20,7 @@ class NewsController extends BlogApp
         $_locale = null
     ) {
         $translation = $this->bindLocaleFromRoute($request, $_locale);
+
         $newsType = $this->getService('nodeTypeApi')->getOneBy(array("name" => "News"));
         $news = $this->getService('nodeApi')->getOneBy(
             array(

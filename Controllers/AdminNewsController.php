@@ -7,7 +7,7 @@ use Themes\Rozier\Controllers\NodesController;
 use RZ\Roadiz\Core\Entities\Node;
 use RZ\Roadiz\Core\Entities\Translation;
 use RZ\Roadiz\Core\ListManagers\EntityListManager;
-use RZ\Roadiz\Core\Utils\StringHandler;
+use RZ\Roadiz\Utils\StringHandler;
 
 use RZ\Roadiz\Core\Exceptions\EntityAlreadyExistsException;
 
