@@ -23,12 +23,6 @@ class BlogApp extends DefaultThemeApp
     protected static $themeDir =       'Blog';
     protected static $backendTheme =    false;
 
-    protected static $specificNodesControllers = array(
-      'home', 'tagListing', "news"
-        // Put here your nodes which need a specific controller
-        // instead of a node-type controller
-    );
-
     /**
      * Return every paths to search for twig templates.
      *
